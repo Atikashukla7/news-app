@@ -4,8 +4,7 @@ import axios from 'axios';
 import Spinner from './Spinner';
 import PropTypes from 'prop-types';
 
-
-const News = ({ pageSize,country,category,apiKey}) => {
+const News = ({ pageSize, country, category, apiKey }) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState(0);
@@ -14,49 +13,30 @@ const News = ({ pageSize,country,category,apiKey}) => {
 
   useEffect(() => {
     setLoading(true);
+    const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+    const url = `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${page}&pageSize=${pageSize}`;
+
     axios
-    .get(`https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=1&pageSize=${pageSize}`)
+      .get(proxyUrl + url)
       .then((response) => {
         setArticles(response.data.articles);
         setResults(response.data.totalResults);
         setLoading(false);
       })
       .catch((error) => {
-        console.log("Error fetching data");
+        console.log("Error fetching data", error);
         setLoading(false);
       });
-  }, [country, category, pageSize,apiKey]);
+  }, [country, category, pageSize, apiKey, page]);
 
   const handlePreviousClick = () => {
     if (page <= 1) return;
-    setLoading(true);
-    axios
-    .get(`https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${page - 1}&pageSize=${pageSize}`)
-      .then((response) => {
-        setArticles(response.data.articles);
-        setPage(page - 1);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log("Error fetching data");
-        setLoading(false);
-      });
+    setPage(page - 1);
   };
-// console.log(articles)
+
   const handleNextClick = () => {
     if (page + 1 > Math.ceil(results / pageSize)) return;
-    setLoading(true);
-    axios
-    .get(`https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${page - 1}&pageSize=${pageSize}`)
-      .then((response) => {
-        setArticles(response.data.articles);
-        setPage(page + 1);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log("Error fetching data");
-        setLoading(false);
-      });
+    setPage(page + 1);
   };
 
   return (
@@ -76,7 +56,7 @@ const News = ({ pageSize,country,category,apiKey}) => {
                   title={element.title}
                   description={element.description}
                   imageUrl={element.urlToImage}
-                  newsUrl={element.url} // fixed link key
+                  newsUrl={element.url}
                 />
               </div>
             );
@@ -105,15 +85,18 @@ const News = ({ pageSize,country,category,apiKey}) => {
     </div>
   );
 };
+
 News.propTypes = {
-    country: PropTypes.string,
-    pageSize: PropTypes.number,
-    category: PropTypes.string,
-  };
-  
-  News.defaultProps = {
-    country: 'us',
-    pageSize: 8,
-    category: 'general',
-}
+  country: PropTypes.string,
+  pageSize: PropTypes.number,
+  category: PropTypes.string,
+  apiKey: PropTypes.string.isRequired,
+};
+
+News.defaultProps = {
+  country: 'us',
+  pageSize: 8,
+  category: 'general',
+};
+
 export default News;
