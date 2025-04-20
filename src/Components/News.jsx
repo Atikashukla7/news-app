@@ -15,7 +15,7 @@ const News = ({ pageSize,country,category,apiKey}) => {
   useEffect(() => {
     setLoading(true);
     axios
-    .get(`https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=f5934662480a4031b9b5db6293062871&page=1&pageSize=${pageSize}`)
+    .get(`https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=1&pageSize=${pageSize}`)
       .then((response) => {
         setArticles(response.data.articles);
         setResults(response.data.totalResults);
@@ -31,7 +31,7 @@ const News = ({ pageSize,country,category,apiKey}) => {
     if (page <= 1) return;
     setLoading(true);
     axios
-    .get(`https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=f5934662480a4031b9b5db6293062871&page=${page - 1}&pageSize=${pageSize}`)
+    .get(`https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${page - 1}&pageSize=${pageSize}`)
       .then((response) => {
         setArticles(response.data.articles);
         setPage(page - 1);
@@ -47,7 +47,7 @@ const News = ({ pageSize,country,category,apiKey}) => {
     if (page + 1 > Math.ceil(results / pageSize)) return;
     setLoading(true);
     axios
-    .get(`https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=f5934662480a4031b9b5db6293062871&page=${page - 1}&pageSize=${pageSize}`)
+    .get(`https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${page - 1}&pageSize=${pageSize}`)
       .then((response) => {
         setArticles(response.data.articles);
         setPage(page + 1);
