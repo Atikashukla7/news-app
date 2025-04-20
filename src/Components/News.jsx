@@ -42,7 +42,7 @@ const News = ({ pageSize,country,category,apiKey}) => {
         setLoading(false);
       });
   };
-console.log(articles)
+// console.log(articles)
   const handleNextClick = () => {
     if (page + 1 > Math.ceil(results / pageSize)) return;
     setLoading(true);

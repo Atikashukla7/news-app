@@ -6,6 +6,7 @@ export default defineConfig({
   server: {
     open: true
   },
+  base: '/news-app/',
   build: {
     rollupOptions: {
       input: '/index.html'
