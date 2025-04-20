@@ -10,7 +10,7 @@ const NewsItem = ({title,description,imageUrl, newsUrl}) => {
   <div className="card-body">
     <h5 className="card-title">{title}</h5>
     <p className="card-text">{description}</p>
-    <Link to={newsUrl} target='blank' className="btn btn-sm btn-dark">Read More</Link>
+    <Link to={newsUrl} target='_blank' className="btn btn-sm btn-dark">Read More</Link>
   </div>
 </div>
     </div>

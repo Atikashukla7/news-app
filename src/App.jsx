@@ -10,9 +10,11 @@ function App() {
   return (  
     <>
       <Navbar/>
-      <News/>
+      <News pageSize={5} country="in" apiKey="f5934662480a4031b9b5db6293062871"/>
     </>
   )
 }
+
+
 
 export default App
