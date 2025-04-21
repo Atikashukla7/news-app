@@ -4,7 +4,8 @@ import axios from 'axios';
 import Spinner from './Spinner';
 import PropTypes from 'prop-types';
 
-const News = ({ pageSize, country, category, apiKey }) => {
+
+const News = ({ pageSize,country,category,apiKey}) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState(0);
@@ -13,30 +14,56 @@ const News = ({ pageSize, country, category, apiKey }) => {
 
   useEffect(() => {
     setLoading(true);
-    const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-    const url = `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${page}&pageSize=${pageSize}`;
-
     axios
-      .get(proxyUrl + url)
+    .get(`https://gnews.io/api/v4/top-headlines?lang=en&country=${country}&topic=${category}&token=${apiKey}&max=${pageSize}&page=${page}`)
+    
       .then((response) => {
         setArticles(response.data.articles);
-        setResults(response.data.totalResults);
+        setResults(response.data.totalArticles);
         setLoading(false);
       })
       .catch((error) => {
-        console.log("Error fetching data", error);
+        console.log("Error fetching data");
         setLoading(false);
       });
-  }, [country, category, pageSize, apiKey, page]);
+  }, [country, category, pageSize,apiKey,page]);
+
+
 
   const handlePreviousClick = () => {
     if (page <= 1) return;
-    setPage(page - 1);
+    setLoading(true);
+    axios
+    .get(`https://gnews.io/api/v4/top-headlines?lang=en&country=${country}&topic=${category}&token=${apiKey}&max=${pageSize}&page=${page - 1}`)
+      .then((response) => {
+        setArticles(response.data.articles);
+        setPage(page - 1);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log("Error fetching data");
+        setLoading(false);
+      });
   };
+// console.log(articles)
+
+
 
   const handleNextClick = () => {
     if (page + 1 > Math.ceil(results / pageSize)) return;
-    setPage(page + 1);
+    setLoading(true);
+    axios
+    .get(`https://gnews.io/api/v4/top-headlines?lang=en&country=${country}&topic=${category}&token=${apiKey}&max=${pageSize}&page=${page + 1}
+`)
+      .then((response) => {
+        setArticles(response.data.articles);
+        setPage(page + 1);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log("Error fetching data");
+        setLoading(false);
+      });
   };
 
   return (
@@ -55,8 +82,8 @@ const News = ({ pageSize, country, category, apiKey }) => {
                 <NewsItem
                   title={element.title}
                   description={element.description}
-                  imageUrl={element.urlToImage}
-                  newsUrl={element.url}
+                  imageUrl={element.image}
+                  newsUrl={element.url} // fixed link key
                 />
               </div>
             );
@@ -85,18 +112,15 @@ const News = ({ pageSize, country, category, apiKey }) => {
     </div>
   );
 };
-
 News.propTypes = {
-  country: PropTypes.string,
-  pageSize: PropTypes.number,
-  category: PropTypes.string,
-  apiKey: PropTypes.string.isRequired,
-};
-
-News.defaultProps = {
-  country: 'us',
-  pageSize: 8,
-  category: 'general',
-};
-
+    country: PropTypes.string,
+    pageSize: PropTypes.number,
+    category: PropTypes.string,
+  };
+  
+  News.defaultProps = {
+    country: 'us',
+    pageSize: 10,
+    category: 'general',
+}
 export default News;

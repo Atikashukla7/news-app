@@ -4,8 +4,8 @@ import News from './Components/News'
 import { Route, Routes } from 'react-router-dom'
 
 function App() {
-  const pageSize = 5;
-  const apiKey = "449a9c561e7b47dbab2a5af9aa141853";
+  const pageSize = 10;
+  const apiKey = "4dfe17d54f4fc4226c21b928b0bff2ea";
 
   return (  
     <>
